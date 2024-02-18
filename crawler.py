@@ -3,6 +3,7 @@ import lxml
 from bs4 import BeautifulSoup
 import re
 from queue import Queue
+import csv
 
 # might make a function to check if is a superhero
 def getLinks(href):
