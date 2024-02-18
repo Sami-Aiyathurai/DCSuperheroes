@@ -3,7 +3,7 @@ import lxml
 from bs4 import BeautifulSoup
 import re
 from queue import Queue
-
+import csv
 
 # might make a function to check if is a superhero
 def getLinks(href):
@@ -11,17 +11,18 @@ def getLinks(href):
 
 def main():
   # read in list of heroes to limit scope
-  file = open("list2.txt", "r") 
-  data = file.read() 
-  heroes = data.split("\n")
+  
+  with open('dc-comics.csv') as file:
+     reader = csv.reader()
+  
   queue = Queue() 
-  marked = []
+  markedLinks = []
   extras = []
 
   root_url = "https://en.wikipedia.org"
   superman = "/wiki/Superman"
   queue.put(superman)
-  marked.append("Superman")
+  markedLinks.append("Superman")
   
   headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE'
@@ -35,9 +36,9 @@ def main():
     for link in links:
         text = link.string
         if text in heroes:
-          if text not in marked:
+          if text not in markedLinks:
             queue.put(link.get("href"))
-            marked.append(text)
+            markedLinks.append(text)
             print("Hero Found: ", text)
         else:
           if text not in extras:
@@ -45,7 +46,7 @@ def main():
   print("made it!")
   print()
   print("Heroes")
-  for hero in marked:
+  for hero in markedLinks:
      print(hero)
   print()
   print("Extras")
